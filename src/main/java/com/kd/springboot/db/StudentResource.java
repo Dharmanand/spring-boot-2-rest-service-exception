@@ -32,21 +32,21 @@ public class StudentResource {
 	public Student retriveStudent(@PathVariable long id) {
 
 		Optional<Student> student = studentRepository.findById(id);
-		if(!student.isPresent()) {
-			throw new StudentNotFoundException("Student has id : "+id +" is not not found in record.");
+		if (!student.isPresent()) {
+			throw new StudentNotFoundException("Student has id " + id + " doesn't exist in record.");
 		}
-		
+
 		return student.get();
 	}
 
 	@DeleteMapping("/students/{id}")
-	public void deleteStudent(@PathVariable long id) {
+	public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
 		Optional<Student> studentOptional = studentRepository.findById(id);
-//		if(!studentOptional.isPresent()) {
-//			return ResponseEntity.notFound().build();
-//		}
+		if (!studentOptional.isPresent()) {
+			throw new StudentNotFoundException("Student has id " + id + " doesn't exist in record.");
+		}
 		studentRepository.deleteById(id);
-//		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/students")
